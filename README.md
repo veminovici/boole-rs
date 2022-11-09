@@ -19,6 +19,16 @@ open ./target/debug/coverage/index.html
 ### Property Based Testing
 The library is using property based testing. It uses the [quickcheck](https://docs.rs/quickcheck/latest/quickcheck/) crate.
 
+## Documentation
+
+### Mathematical Expressions
+Read more [here](https://docs.rs/rustdoc-katex-demo/0.1.5/rustdoc_katex_demo/) and [here](https://github.com/paulkernfeld/rustdoc-katex-demo).
+
+```bash
+set RUSTDOCFLAGS=--html-in-header katex-header.html
+cargo doc --no-deps --open
+```
+
 ## About
 
 > Code designed and written on the beautiful island of [**Saaremaa**](https://goo.gl/maps/DmB9ewY2R3sPGFnTA), Estonia.
