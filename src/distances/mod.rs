@@ -37,3 +37,12 @@ where
 impl<T: Value> Distance for T {
     type Value = T;
 }
+
+/// A space with a distance attached to it.
+pub trait Proximity<T = Self> {
+    /// The type of distance for this space.
+    type Distance: Distance;
+
+    /// Compute the distance between two points in the space.
+    fn distance(&self, other: &T) -> Self::Distance;
+}
