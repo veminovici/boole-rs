@@ -1,5 +1,6 @@
 # BOOLE
 
+[![Rust](https://github.com/veminovici/boole-rs/actions/workflows/rust.yml/badge.svg?branch=main)](https://github.com/veminovici/boole-rs/actions/workflows/rust.yml)
 
 ## Tests
 
