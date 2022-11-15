@@ -698,3 +698,137 @@ mod unit_tests {
         assert_eq!(iter.next(), None);
     }
 }
+
+
+#[cfg(test)]
+mod prop_tests {
+    use super::*;
+    use quickcheck_macros::quickcheck;
+
+    /// Random values for Byte
+    impl quickcheck::Arbitrary for Byte {
+        fn arbitrary(g: &mut quickcheck::Gen) -> Self {
+            u8::arbitrary(g).into()
+        }
+    }
+
+    /// Argument for building the Byte from a list of u8 elements.
+    #[derive(Clone, Copy, Debug)]
+    pub struct Bytes {
+        pub xs: [u8; 8],
+    }
+
+    impl quickcheck::Arbitrary for Bytes {
+        fn arbitrary(g: &mut quickcheck::Gen) -> Self {
+            let u0 = u8::arbitrary(g) % 2;
+            let u1 = u8::arbitrary(g) % 2;
+            let u2 = u8::arbitrary(g) % 2;
+            let u3 = u8::arbitrary(g) % 2;
+            let u4 = u8::arbitrary(g) % 2;
+            let u5 = u8::arbitrary(g) % 2;
+            let u6 = u8::arbitrary(g) % 2;
+            let u7 = u8::arbitrary(g) % 2;
+
+            let xs = [u0, u1, u2, u3, u4, u5, u6, u7];
+            Bytes { xs }
+        }
+    }
+
+    /// Arguments for building the Byte for a list of bool elements.
+    #[derive(Clone, Copy, Debug)]
+    pub struct Bools {
+        pub xs: [bool; 8],
+    }
+
+    impl quickcheck::Arbitrary for Bools {
+        fn arbitrary(g: &mut quickcheck::Gen) -> Self {
+            let u0 = u8::arbitrary(g) % 2;
+            let u1 = u8::arbitrary(g) % 2;
+            let u2 = u8::arbitrary(g) % 2;
+            let u3 = u8::arbitrary(g) % 2;
+            let u4 = u8::arbitrary(g) % 2;
+            let u5 = u8::arbitrary(g) % 2;
+            let u6 = u8::arbitrary(g) % 2;
+            let u7 = u8::arbitrary(g) % 2;
+
+            let xs = [u0, u1, u2, u3, u4, u5, u6, u7].map(|u| if u == 0 { false } else { true });
+            Bools { xs }
+        }
+    }
+
+    #[quickcheck]
+    fn u8_from_into_byte(x: u8) -> bool {
+        let byte = Byte::from(x);
+        x == byte.into()
+    }
+
+    #[quickcheck]
+    fn display_(byte: Byte) -> bool {
+        !format!("byte: {byte}").is_empty()
+    }
+
+    #[quickcheck]
+    fn byte_set(byte: Byte, bit: u8) -> bool {
+        let bit = bit % 8;
+        let byte = byte.set_bit(bit);
+        Bit::One == byte.get_bit(bit)
+    }
+
+    #[quickcheck]
+    fn byte_reset(byte: Byte, bit: u8) -> bool {
+        let bit = bit % 8;
+        let byte = byte.reset_bit(bit);
+        Bit::Zero == byte.get_bit(bit)
+    }
+
+    #[quickcheck]
+    fn byte_toggle(byte: Byte, bit: u8) -> bool {
+        let bit = bit % 8;
+
+        let orig = byte.get_bit(bit);
+        let byte = byte.toggle_bit(bit);
+        let upd = byte.get_bit(bit);
+
+        orig != upd
+    }
+
+    #[quickcheck]
+    fn eq_(byte: Byte) -> bool {
+        let byte1 = byte.clone();
+        byte1 == byte
+    }
+
+    #[quickcheck]
+    fn diff_(byte: Byte, bit: u8) -> bool {
+        let bit = bit % 8;
+        let byte1 = byte.toggle_bit(bit);
+        byte1 != byte
+    }
+
+    #[quickcheck]
+    fn ord_(byte: Byte, bit: u8) -> bool {
+        let bit = bit % 8;
+        let byte1 = byte.set_bit(bit);
+        byte <= byte1
+    }
+
+    #[quickcheck]
+    fn from_bytes(bytes: Bytes) -> bool {
+        let xs = bytes.clone();
+        let _s = format!("{:?}", xs);
+        
+        let byte = Byte::from_iter(bytes.xs);
+        let iter = byte.iter().map(|b| u8::from(b));
+        iter.zip(bytes.xs).all(|(i, x)| i == x)
+    }
+
+    #[quickcheck]
+    fn from_bools(bools: Bools) -> bool {
+        let xs = bools.clone();
+        let _s = format!("{:?}", xs);
+
+        let byte = Byte::from_iter(bools.xs);
+        let iter = bools.xs.map(|b| if b { Bit::One } else { Bit::Zero });
+        byte.iter().zip(iter).all(|(i, j)| i == j)
+    }
+}
