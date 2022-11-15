@@ -20,6 +20,8 @@ open ./target/debug/coverage/index.html
 ### Property Based Testing
 The library is using property based testing. It uses the [quickcheck](https://docs.rs/quickcheck/latest/quickcheck/) crate.
 
+---
+
 ## Documentation
 
 ### Mathematical Expressions
@@ -29,6 +31,8 @@ Read more [here](https://docs.rs/rustdoc-katex-demo/0.1.5/rustdoc_katex_demo/) a
 set RUSTDOCFLAGS=--html-in-header katex-header.html
 cargo doc --no-deps --open
 ```
+
+---
 
 ## About
 
