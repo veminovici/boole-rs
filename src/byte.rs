@@ -318,6 +318,30 @@ impl Byte {
         let mask = MASKS_SET[bit as usize];
         Self(self.0 ^ mask)
     }
+
+    ///
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use boole_rs::{Bit, Byte};
+    ///
+    /// let a = Byte::from(10);
+    /// let b = Byte::from(14);
+    /// let it = a.is_subset(&b);
+    /// assert!(it);
+    /// ```
+    pub fn is_subset(&self, other: &Self) -> bool {
+        for i in 0..U8_BITS {
+            let a: bool = self.get_bit(i as u8).into();
+            let b: bool = other.get_bit(i as u8).into();
+            if a && (a != b) {
+                return false;
+            }
+        }
+
+        true
+    }
 }
 
 //
@@ -697,8 +721,18 @@ mod unit_tests {
 
         assert_eq!(iter.next(), None);
     }
-}
 
+    #[test]
+    fn is_subset_() {
+        let a = Byte::from(10);
+        let b = Byte::from(14);
+        let it = a.is_subset(&b);
+        assert!(it);
+
+        let it = b.is_subset(&a);
+        assert!(!it);
+    }
+}
 
 #[cfg(test)]
 mod prop_tests {
@@ -816,7 +850,7 @@ mod prop_tests {
     fn from_bytes(bytes: Bytes) -> bool {
         let xs = bytes.clone();
         let _s = format!("{:?}", xs);
-        
+
         let byte = Byte::from_iter(bytes.xs);
         let iter = byte.iter().map(|b| u8::from(b));
         iter.zip(bytes.xs).all(|(i, x)| i == x)
