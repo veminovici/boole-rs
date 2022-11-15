@@ -9,7 +9,7 @@ See the instructions [steps](https://github.com/mozilla/grcov#example-how-to-gen
 
 ```bash
 export RUSTFLAGS="-Cinstrument-coverage"
-export LLVM_PROFILE_FILE="./coverage/aabel-%p-%m.profraw"
+export LLVM_PROFILE_FILE="./coverage/lib-%p-%m.profraw"
 cargo build
 cargo test
 grcov ./coverage -s . --binary-path ./target/debug/ -t html --branch --ignore-not-existing -o ./target/debug/coverage/

@@ -1,1 +1,3 @@
-pub mod distances;
+mod bit;
+
+pub use bit::*;
