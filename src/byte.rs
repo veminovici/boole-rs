@@ -342,6 +342,37 @@ impl Byte {
 
         true
     }
+
+    /// Returns an iterator which gives access
+    /// to every single bit in the [`Byte`] value.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// use boole_rs::{Bit, Byte};
+    /// 
+    /// let byte = Byte::from(10);
+    /// let mut iter = byte.iter();
+    /// 
+    /// assert_eq!(iter.next(), Some(Bit::Zero));
+    /// assert_eq!(iter.next(), Some(Bit::Zero));
+    /// assert_eq!(iter.next(), Some(Bit::Zero));
+    /// assert_eq!(iter.next(), Some(Bit::Zero));
+    /// 
+    /// assert_eq!(iter.next(), Some(Bit::One));
+    /// assert_eq!(iter.next(), Some(Bit::Zero));
+    /// assert_eq!(iter.next(), Some(Bit::One));
+    /// assert_eq!(iter.next(), Some(Bit::Zero));
+    /// 
+    /// assert_eq!(iter.next(), None);
+    /// ```
+    #[inline]
+    pub fn iter(&self) -> Iter {
+        Iter {
+            byte: self.clone(),
+            crnt: 0,
+        }
+    }
 }
 
 //
@@ -419,16 +450,6 @@ impl Shl<u8> for Byte {
 //
 // Iterator
 //
-
-impl Byte {
-    #[inline]
-    pub fn iter(&self) -> Iter {
-        Iter {
-            byte: self.clone(),
-            crnt: 0,
-        }
-    }
-}
 
 impl IntoIterator for Byte {
     type Item = Bit;
