@@ -1,6 +1,8 @@
 # BOOLE
 
 [![Rust](https://github.com/veminovici/boole-rs/actions/workflows/rust.yml/badge.svg?branch=main)](https://github.com/veminovici/boole-rs/actions/workflows/rust.yml)
+![Crates.io](https://img.shields.io/crates/v/boole-rs)
+![Crates.io](https://img.shields.io/crates/d/boole-rs)
 
 ## Tests
 
